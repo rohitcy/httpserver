@@ -1,4 +1,5 @@
 require_relative './generate_response'
+require_relative './get_data_db'
 
 class ProcessRequest
 
@@ -7,9 +8,9 @@ class ProcessRequest
     request_hash = generate_request_hash(request)
     case case_variable[0]
     when "POST"
-      GetResponse.store_in_file(request.read(request_hash["Content-Length"].to_i))
+      GenerateResponse.handle_post(request.read(request_hash["Content-Length"].to_i))
     else "GET"
-      GetResponse.get_response_file(case_variable[1].split("/")[1])
+      GenerateResponse.handle_get(case_variable[1].split("/")[-1])
     end
   end
 
