@@ -1,4 +1,8 @@
-MAPPINGS = { 'savedata' => 'create' }
+MAPPINGS = {
+  'savedata' => 'comment_controller#create',
+  'comments' => 'comment_controller#read_all'
+}
+MAPPINGS.values.each {|file| require_relative "../#{file.split("#")[0]}" }
 
 class RequestMapper
 
@@ -15,7 +19,14 @@ class RequestMapper
   end
 
   def self.serveDynamic(action, params)
-    puts "hello"
+    controller = get_controller_name(action)
+    method = action.split("#")[1]
+    eval("#{controller}.#{method}(#{params})") if params.nil?
+    eval("#{controller}.#{method}")
+  end
+
+  def self.get_controller_name(action)
+    action.split("#")[0].split('_').map {|str| str.capitalize}.join
   end
 
 end

@@ -10,6 +10,7 @@ class RequestController
 
   def handle_request
     request_details = get_request_details(request)
+    puts "#{request_details}"
     url = request_details["GET"].nil? ? request_details["POST"].split(" ")[0].gsub('/','') : request_details["GET"].split(" ")[0].gsub('/','')
     action = RequestMapper.get_handeller(url)
     case action
@@ -33,7 +34,9 @@ class RequestController
   end
 
   def extract_params(request_hash, request)
-    if request_hash["POST"].nil?
+    if request_hash["POST"].nil? && request_hash["Referer"].nil?
+      request_hash["params"] = nil
+    elsif request_hash["POST"].nil? && !request_hash["Referer"].nil?
       params = request_hash["Referer"].split('?')[1].split('&').map { |str| str.split("=")[1] }
       request_hash["params"] = params
     else
