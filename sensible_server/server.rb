@@ -1,4 +1,4 @@
-require_relative './request_handler/middleware'
+require_relative './request_handler/request_processor'
 require 'socket'
 
 HOST = ARGV[0].nil? ? '127.0.0.1' : ARGV[0]

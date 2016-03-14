@@ -1,13 +1,15 @@
 MAPPINGS = {
   'savedata' => 'comment_controller#create',
-  'comments' => 'comment_controller#read_all'
+  'comments' => 'comment_controller#read_all',
+  'comments/' => 'comment_controller#read_comment'
 }
+
 MAPPINGS.values.each {|file| require_relative "../#{file.split("#")[0]}" }
 
 class RequestMapper
 
   def self.get_handeller(request)
-    puts "#{request}"
+    return  MAPPINGS[request.chop] if request.include?('/')
     return "static" if MAPPINGS[request].nil?
     MAPPINGS[request]
   end
@@ -19,10 +21,12 @@ class RequestMapper
   end
 
   def self.serveDynamic(action, params)
-    controller = get_controller_name(action)
+    params = Array.new if params.nil?
+    controller_class = get_controller_name(action)
     method = action.split("#")[1]
-    eval("#{controller}.#{method}(#{params})") if params.nil?
-    eval("#{controller}.#{method}")
+    controller_obj = eval("#{controller_class}.new(params)")
+    response = eval("controller_obj.#{method}")
+    response
   end
 
   def self.get_controller_name(action)
