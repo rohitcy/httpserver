@@ -4,12 +4,12 @@ MAPPINGS = {
   'comments/' => 'comment_controller#read_comment'
 }
 
-MAPPINGS.values.each {|file| require_relative "../#{file.split("#")[0]}" }
+MAPPINGS.values.each { |file| require_relative "../#{file.split("#")[0]}" }
 
 class RequestMapper
 
   def self.get_handeller(request)
-    return  MAPPINGS[request.chop] if request.include?('/')
+    return  MAPPINGS[request.split(/[0-9]/)[0]] if request.include?('/')
     return "static" if MAPPINGS[request].nil?
     MAPPINGS[request]
   end

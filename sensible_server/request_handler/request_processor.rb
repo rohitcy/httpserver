@@ -18,7 +18,6 @@ class RequestController
       response = RequestMapper.serveStatic(url)
     else
       request_det_par = extract_params(request_details,request)
-      puts "#{request_det_par}"
       response = RequestMapper.serveDynamic(action,request_det_par["params"])
     end
     sendResponse(response)

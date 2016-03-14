@@ -43,7 +43,7 @@ class CommentController
     begin
       "<html>" + DB.get_first_value("select comment from comment_detail where id=#{id}") + "</html>"
     rescue SQLite3::Exception => e
-      puts "Exception occurred"
+      puts "Exception occurred Inside Read Coment Method Id: #{id}"
       puts e
       ensure
     end
